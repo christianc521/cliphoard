@@ -5,7 +5,7 @@ Cliphoard started as a solution for me to fill out job application more efficien
 
 Cliphoard was inspired by popup application launchers, like Rofi and dmenu, and is also intended to be launched with keybindings by using a window manager.
 
-![Peek 2025-04-02 17-41](https://github.com/user-attachments/assets/7a07e35f-b3bd-4874-b53c-3bc40d3fdd8d)
+![Peek 2025-04-02 18-52](https://github.com/user-attachments/assets/f7c7119c-69b3-4c03-a628-82a12bceee59)
 
 ## Features
 - i3 keybinding launch
