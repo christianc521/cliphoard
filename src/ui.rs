@@ -2,7 +2,7 @@
 // fuzzy finder [ DONE ]
 // line wrapping (copy) [ DONE ]
 // elipses (...) in paste [ DONE ]
-// user config
+// user config [ DONE ]
 // styling (dividing line, transparent placeholder text) [ DONE ]
 use crate::config::{self, ColorConfig, Config};
 use crate::system::ClipboardStorage;
@@ -60,17 +60,19 @@ impl DClipWindow {
             None
         };
 
-        let window = video
+        let mut window = video
             .window("", config.width as u32, config.height as u32)
             .position_centered()
             .borderless()
             .build()
             .expect("Failed to create window.");
+        let _ = window.set_opacity(0.5);
 
-        let canvas = window
+        let mut canvas = window
             .into_canvas()
             .build()
             .expect("Failed to create canvas.");
+        let _ = canvas.set_blend_mode(sdl2::render::BlendMode::Blend);
 
         let ttf = ttf::init().expect("Failed to retrieve ttf context.");
         let text = video.text_input();
@@ -138,22 +140,8 @@ impl DClipWindow {
 
         self.text.start();
         'running: loop {
-            if self.needs_update {
-                self.filtered_snippets = self
-                    .snippets
-                    .get_entries()
-                    .iter()
-                    .enumerate()
-                    .filter(|(_, s)| self.fuzzy_find(&s.content))
-                    .map(|(i, _)| i)
-                    .collect();
-
-                self.selected_index = self
-                    .selected_index
-                    .min(self.filtered_snippets.len().saturating_sub(1));
-                self.needs_update = false;
-            }
             self.canvas.set_draw_color(self.user_config.background); // background color
+            self.canvas.set_blend_mode(sdl2::render::BlendMode::Blend);
             self.canvas.clear();
             for event in event_pump.poll_iter() {
                 match event {
@@ -175,7 +163,10 @@ impl DClipWindow {
                                     }
                                 }
                                 Keycode::D => {
-                                    if keymod == Mod::LCTRLMOD {
+                                    if keymod == Mod::LCTRLMOD
+                                        && self.snippets.get_entries().len() != 0
+                                    {
+                                        let _ = self.selected_index = 0;
                                         let _ = self.snippets.remove_entry(self.selected_index);
                                         self.needs_update = true;
                                     }
@@ -247,6 +238,32 @@ impl DClipWindow {
                     }
                     _ => {}
                 }
+            }
+
+            if self.needs_update {
+                let mut matches: Vec<(usize, bool)> = Vec::new();
+                for (i, snippet) in self.snippets.get_entries().iter().enumerate() {
+                    let nickname_match = snippet
+                        .nickname
+                        .as_ref()
+                        .map_or(false, |n| self.fuzzy_find(n));
+
+                    let content_match = self.fuzzy_find(&snippet.content);
+
+                    if nickname_match || content_match {
+                        matches.push((i, nickname_match));
+                    }
+                }
+
+                // Prioritize nickname search
+                matches.sort_by(|a, b| b.1.cmp(&a.1));
+
+                self.filtered_snippets = matches.into_iter().map(|(i, _)| i).collect();
+
+                self.selected_index = self
+                    .selected_index
+                    .min(self.filtered_snippets.len().saturating_sub(1));
+                self.needs_update = false;
             }
 
             if !self.input_buffer.is_empty() {
@@ -369,9 +386,37 @@ impl DClipWindow {
                         .canvas
                         .copy(&texture, None, Some(rect))
                         .expect("Failed to copy to canvas.");
+
                     y += 35;
+
+                    let index_label = format!(
+                        "{}/{}",
+                        &self.selected_index.saturating_add(1),
+                        &self.filtered_snippets.len()
+                    );
+
+                    let copy_surface = font
+                        .render(&index_label)
+                        .blended(self.user_config.unselected_color)
+                        .expect("Failed to render text.");
+
+                    let texture = creator
+                        .create_texture_from_surface(&copy_surface)
+                        .expect("Failed to create texture.");
+
+                    let label_rect = Rect::new(
+                        1000 - copy_surface.width() as i32 - 10,
+                        5,
+                        copy_surface.width(),
+                        copy_surface.height() + 5,
+                    );
+                    let _ = self
+                        .canvas
+                        .copy(&texture, None, Some(label_rect))
+                        .expect("Failed to copy to canvas.");
                 }
             }
+
             self.canvas.present();
         }
         self.paste_text.clone()

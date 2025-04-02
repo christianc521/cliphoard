@@ -230,6 +230,7 @@ dependencies = [
  "directories",
  "enigo",
  "font-kit",
+ "peak_alloc",
  "sdl2",
  "serde",
  "serde_json",
@@ -894,6 +895,12 @@ checksum = "5cf07ef4804cfa9aea3b04a7bbdd5a40031dbb6b4f2cbaf2b011666c80c5b4f2"
 dependencies = [
  "rustc_version",
 ]
+
+[[package]]
+name = "peak_alloc"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29c4e8e2dd832fd76346468f822e4e600d30ba4e5aa545a128abf12cfae7ea3e"
 
 [[package]]
 name = "pkg-config"

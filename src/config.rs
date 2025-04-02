@@ -50,7 +50,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            background: ColorConfig::RGB(60, 56, 42),
+            background: ColorConfig::RGBA(60, 56, 42, 80),
             cursor: ColorConfig::RGB(20, 200, 29),
             font_size: 24,
             selected_color: ColorConfig::RGB(230, 230, 230),

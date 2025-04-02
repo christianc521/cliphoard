@@ -1,6 +1,7 @@
 use arboard::Clipboard;
 use clap::Parser;
 use enigo::{Direction::*, Enigo, Key, Keyboard, Settings};
+use peak_alloc::PeakAlloc;
 use std::process::Command;
 use ui::DClipWindow;
 
@@ -8,6 +9,9 @@ mod cli;
 mod config;
 mod system;
 mod ui;
+
+#[global_allocator]
+static PEAK_ALLOC: PeakAlloc = PeakAlloc;
 
 fn main() {
     // Load or create user config file
@@ -48,4 +52,6 @@ fn main() {
         let _ = enigo.key(Key::Control, Release);
         let _ = enigo.key(Key::Shift, Release);
     }
+    let peak_mem = PEAK_ALLOC.peak_usage_as_mb();
+    println!("The max amount that was used: {}mb", peak_mem);
 }
