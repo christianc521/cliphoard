@@ -38,8 +38,8 @@ cliphoard
 ````
 
 Add keybindings to your window manager config
-`i3 config file`
 ````
+# i3wm config
 bindsym $mod+c exec "cliphoard --copy"
 bindsym $mod+v exec "cliphoard"
 ````
