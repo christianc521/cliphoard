@@ -3,7 +3,7 @@
 
 Cliphoard started as a solution for me to fill out job applications more efficiently by avoiding the need to switch tabs to copy my job descriptions when needed. After getting a working clipboard manager, I found I was using it for more than just job applications and began using it to save snippets like CLI commands and boilerplate code.
 
-Cliphoard was inspired by popup application launchers, like Rofi and dmenu, and is also intended to be launched with keybindings by using a window manager.
+Cliphoard was inspired by popup application launchers, like Rofi and dmenu, and is also intended to be launched with window manager keybindings.
 
 ![Peek 2025-04-02 18-52](https://github.com/user-attachments/assets/f7c7119c-69b3-4c03-a628-82a12bceee59)
 
