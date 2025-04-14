@@ -8,6 +8,7 @@ use ui::DClipWindow;
 mod cli;
 mod config;
 mod system;
+mod test;
 mod ui;
 
 #[global_allocator]
