@@ -1,6 +1,8 @@
 <h1 align="center"> cliphoard </h1>
 <p align="center"><i>a quick and simple way to expand your clipboard</i>.</p>
 
+![Peek 2025-04-02 18-52](https://github.com/user-attachments/assets/a2178409-be95-4dc5-8374-b28d7e2f9eba)
+
 Cliphoard started as a solution for me to fill out job application more efficiently by avoiding the need to switch tabs to copy my job descriptions everytime I was asked. After getting a working clipboard manager, I found I was using it for more than just job applications and began using it to save snippets like CLI commands and boilerplate code.
 
 Cliphoard was inspired by popup application launchers, like Rofi and dmenu, and is also intended to be launched with keybindings by using a window manager.
